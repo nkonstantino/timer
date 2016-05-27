@@ -25,8 +25,12 @@
                         </ol>
                     </div>
                     <div class="col-lg-12">
-                    
-                    
+                    <?php                        
+                        $timer = new Timer();
+                        //$timer->start();
+                        $timer->check(2);
+                        $timer->displayAll();
+                    ?>
                     </div>
                 </div>
                 <!-- /.row -->
