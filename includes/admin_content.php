@@ -26,11 +26,30 @@
                     </div>
                     <div class="col-lg-12">
                     <?php                        
+                        if(isset($_GET['action'])){
+                            switch ($_GET['action']){
+                                case "Start":
+                                    $timer = new Timer();
+                                    $timer->start(2,2);//would get these numbers from sessions
+                                    break;
+                                case "Stop":
+                                    $timer = new Timer();
+                                    $timer->stop(2,2); //would get these numbers from sessions
+                                    break;
+                                default:
+                                    $timer = new Timer();
+                                    $timer->displayAll();
+                            }
+                        }
                         $timer = new Timer();
-                        //$timer->start();
-                        $timer->check(2);
+                        //$timer->start(2,2);
+                        //$timer->check_exist(2,2);
                         $timer->displayAll();
                     ?>
+                    <form action="" method="get">
+                        <input type="submit" value="Start" name="action">
+                        <input type="submit" value="Stop" name="action">
+                    </form>
                     </div>
                 </div>
                 <!-- /.row -->
