@@ -30,7 +30,7 @@
                             switch ($_GET['action']){
                                 case "Start":
                                     $timer = new Timer();
-                                    $timer->start(2,2);//would get these numbers from sessions
+                                    $timer->start(2,2);//would get these numbers from sessions & get
                                     break;
                                 case "Stop":
                                     $timer = new Timer();

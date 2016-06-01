@@ -14,7 +14,6 @@ class Timer{
     public function start($u,$p){
         //PURPOSE: START THE TIMER + SEND INFO TO THE DATABASE
         include('database.php');//make sure it knows where the database is.
-        //get current time
         $check = $this->check_exist($u,$p);
         if(!$check){  //Check to see if the user has a timer already running
             $start=time();  //Set the start Time
@@ -36,18 +35,21 @@ class Timer{
     public function stop($u,$p){
         //PURPOSE: STOP THE TIMER + SEND INTO TO THE DATABASE
         include('database.php');//make sure it knows where the database is.
-        //get current time
-        $stop=time();
-        //UPDATE E_time in db
-        $sql = "UPDATE timer SET E_time = {$stop} WHERE U_id = {$u} AND P_id = {$p} AND E_time = 0 ";
-        $s_time = $db->query($sql);
-        if($s_time){
-            echo "Timer Stopped at: ".$stop;
-            //success message
-        }else{
-            echo "Timer Stop Fail";
+        $check = $this->check_exist($u,$p);
+        if($check){
+            $stop=time();//get current time
+            //UPDATE E_time in db
+            $sql = "UPDATE timer SET E_time = {$stop} WHERE U_id = {$u} AND P_id = {$p} AND E_time = 0 ";
+            $s_time = $db->query($sql);
+            if($s_time){
+                echo "Timer Stopped at: ".$stop;
+                //success message
+            }else{
+                echo "Timer Stop Fail";
+            }
+        } else {
+            echo "No timer to stop!";
         }
-        
     }//END STOP FUNCTION
     
     public function check_exist($u,$p){
@@ -61,29 +63,45 @@ class Timer{
         $timer_check->execute();
         $result = $timer_check->fetchColumn();
         //Counts the number of results that match.
-        echo "Found Started Timers: ".$result."<br>";
+        //echo "Found Started Timers: ".$result."<br>";
         return $result; //FUCK YES FINALLY WORKS
         
     }
                         
     
     public function displayAll(){
+        //PURPOSE: Send out information to display all timers.
+        //needs to return JSON encode query for Angular.
         include('database.php');//make sure it knows where the database is.
         //find all of the timers
-        $sql = 'SELECT * FROM timer WHERE U_id = 2';
-        echo "<br>";
+        $sql = 'SELECT * FROM timer';
+//        echo "<br>";
         foreach($db->query($sql) as $row){
             $P_id = $row['P_id'];
             $S_time = $row['S_time'];
             $E_time = $row['E_time'];
             $T_time = $this->total($S_time,$E_time);
-            echo "Project: ".$P_id." Start Time: ".$S_time." End Time: ".$E_time.$T_time."<br>";
-        }//That was easy.
+//            echo "Project: ".$P_id." Start Time: ".$S_time." End Time: ".$E_time.$T_time."<br>";
+        }//test display of information
+        //Below is for the actual JSON file
+        $thing = $db->prepare($sql);
+        $db->execute();
+        $display = $db->fetchAll();
+        return json_encode($display);
+        
+        //try-catch block
     }
     
     public function changeTimer(){
-        //PURPOSE: This is for editing timers.  Not sure how I want to handle it yet.
-        //I think I want a modal to pop up when selecting "edit" and then letting user submit changes.
+        //PURPOSE: This is for editing exisiting timers.
+        //Will create "editTimer.php" for form.
+        //Query by timer ID
+    }
+    
+    public function addTimer(){
+        //PURPOSE: Add a timer that a user might have forgotten to record.
+        //Will create "addTimer.php" for form.
+        //Insert query ezpz.
     }
     
     private function total($start,$end){
@@ -93,6 +111,7 @@ class Timer{
         //echo "<br>";
         //echo $total." seconds";
         if( $total > 0){
+            //return gmdate("H:i:s", $total);
             return " Total Time: ".floor($total/60) . " minutes";
         } else {
             return NULL;
