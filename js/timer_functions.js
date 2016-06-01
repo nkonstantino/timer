@@ -24,6 +24,6 @@ function timerCounter($scope,$timeout) {
     var mytimeout = $timeout($scope.onTimeout,1000);
     
     $scope.stop = function(){
-        $timeout.cancel(mytimeout);
+        $timeout.cancel(mytimeout); 
     }          
 }
