@@ -38,8 +38,14 @@ class Timer{
         $check = $this->check_exist($u,$p);
         if($check){
             $stop=time();//get current time
+            //Calculate T_Time
+            $t_sql = "SELECT * FROM timer WHERE U_id = {$u} AND P_id = {$p} AND E_time = 0 ";
+            foreach($db->query($t_sql) as $row){
+                $S_time = $row['S_time'];
+                $T_time = $this->total($S_time,$stop);
+            }
             //UPDATE E_time in db
-            $sql = "UPDATE timer SET E_time = {$stop} WHERE U_id = {$u} AND P_id = {$p} AND E_time = 0 ";
+            $sql = "UPDATE timer SET E_time = {$stop}, T_time = {$T_time} WHERE U_id = {$u} AND P_id = {$p} AND E_time = 0 ";
             $s_time = $db->query($sql);
             if($s_time){
                 echo "Timer Stopped at: ".$stop;
@@ -85,11 +91,11 @@ class Timer{
         }//test display of information
         //Below is for the actual JSON file
         $thing = $db->prepare($sql);
-        $db->execute();
-        $display = $db->fetchAll();
-        return json_encode($display);
+        $thing->execute();
+        $display = $thing->fetchAll();
+        echo json_encode($display);
         
-        //try-catch block
+        //try-catch block?
     }
     
     public function changeTimer(){
@@ -108,14 +114,15 @@ class Timer{
         //get start and stop times from function call
         //find difference
         $total = $end - $start;
+        return $total;
         //echo "<br>";
         //echo $total." seconds";
-        if( $total > 0){
-            //return gmdate("H:i:s", $total);
-            return " Total Time: ".floor($total/60) . " minutes";
-        } else {
-            return NULL;
-        }
+//        if( $total > 0){
+//            return gmdate("H:i:s", $total);
+//            return " Total Time: ".floor($total/60) . " minutes";
+//        } else {
+//            return NULL;
+//        }
         //return $total/3600 . " hours";
     }
 }

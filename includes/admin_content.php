@@ -38,13 +38,13 @@
                                     break;
                                 default:
                                     $timer = new Timer();
-                                    $timer->displayAll();
+                                    //$timer->displayAll();
                             }
                         }
                         $timer = new Timer();
                         //$timer->start(2,2);
                         //$timer->check_exist(2,2);
-                        $timer->displayAll();
+                        //$timer->displayAll();
                     ?>
                     <form action="" method="get">
                         <input type="submit" value="Start" name="action">
