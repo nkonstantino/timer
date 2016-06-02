@@ -98,32 +98,80 @@ class Timer{
         //try-catch block?
     }
     
-    public function changeTimer(){
+    public function updateTimer(){
+        include('database.php');
         //PURPOSE: This is for editing exisiting timers.
         //Will create "editTimer.php" for form.
         //Query by timer ID
+        if(isset($_POST['update_timer'])){
+            $t_id = $_POST['t_id'];
+            $u_id = $_POST['u_id'];
+            $p_id = $_POST['p_id'];
+            $s_time = $_POST['s_time'];
+            $s_date = $_POST['s_date'];
+            $e_time = $_POST['e_time'];
+            $e_date = $_POST['e_date'];
+
+            //time conversion
+            $s_time_conv = date('U',strtotime($s_date." ".$s_time)); //I DID IT!!
+            $e_time_conv = date('U',strtotime($e_date." ".$e_time));
+            $t_time = $this->total($s_time_conv,$e_time_conv);
+            $sql = "UPDATE timer SET P_id={$p_id},U_id={$u_id},S_time={$s_time_conv},E_time={$e_time_conv},T_time={$t_time} WHERE T_id={$t_id}";
+            $db->query($sql);
+        } else {
+            echo "This is for use with the update_timer form!";
+        }
+    }
+    
+    public function getTimer(){ //This doesn't work?
+        include('database.php');
+        if(isset($_GET['t_id'])){
+            $t_id = $_GET['t_id'];
+            $sql = "SELECT * FROM timer WHERE T_id = {$t_id}";
+            foreach($db->query($sql) as $row){
+                $T_id = $row['T_id'];
+                $P_id = $row['P_id'];
+                $U_id = $row['U_id'];
+                $S_time = $row['S_time'];
+                $E_time = $row['E_time'];
+            }
+            //convert times
+            $s_date = date('Y-m-d',$S_time);
+            $s_time = date('h:i:s',$S_time);
+            $e_date = date('Y-m-d',$E_time);
+            $e_time = date('h:i:s',$E_time);
+        }
     }
     
     public function addTimer(){
         //PURPOSE: Add a timer that a user might have forgotten to record.
         //Will create "addTimer.php" for form.
         //Insert query ezpz.
+        include('database.php');
+        if(isset($_POST['add_timer'])){
+            $u_id = $_POST['u_id'];
+            $p_id = $_POST['p_id'];
+            $s_time = $_POST['s_time'];
+            $s_date = $_POST['s_date'];
+            $e_time = $_POST['e_time'];
+            $e_date = $_POST['e_date'];
+
+            //time conversion
+            $s_time_conv = date('U',strtotime($s_date." ".$s_time)); //I DID IT!!
+            $e_time_conv = date('U',strtotime($e_date." ".$e_time));
+            $t_time = $this->total($s_time_conv,$e_time_conv);
+            $sql = "INSERT INTO timer (P_id,U_id,S_time,E_time,T_time) VALUES ({$p_id},{$u_id},{$s_time_conv},{$e_time_conv},{$t_time})";
+            $db->query($sql);
+            echo "Timer Added!";
+        } else {
+            echo "This is for use with the update_timer form!";
+        }
     }
     
     private function total($start,$end){
-        //get start and stop times from function call
-        //find difference
+        //get start and stop times from function call & find difference
         $total = $end - $start;
         return $total;
-        //echo "<br>";
-        //echo $total." seconds";
-//        if( $total > 0){
-//            return gmdate("H:i:s", $total);
-//            return " Total Time: ".floor($total/60) . " minutes";
-//        } else {
-//            return NULL;
-//        }
-        //return $total/3600 . " hours";
     }
 }
 ?>
