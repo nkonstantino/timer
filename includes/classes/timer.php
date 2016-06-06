@@ -168,6 +168,16 @@ class Timer{
         }
     }
     
+    public function deleteTimer(){
+        //PURPOSE: Delete selected timer!
+        include('database.php');
+        if(isset($_POST['delete_timer'])){
+            $T_id = $_POST['delete_timer'];
+            $sql = "DELETE FROM timer WHERE T_id = {$T_id} ";
+            $db->query($sql);
+        }
+    }
+
     private function total($start,$end){
         //get start and stop times from function call & find difference
         $total = $end - $start;
