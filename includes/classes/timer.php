@@ -81,21 +81,11 @@ class Timer{
         include('database.php');//make sure it knows where the database is.
         //find all of the timers
         $sql = 'SELECT * FROM timer';
-//        echo "<br>";
-        foreach($db->query($sql) as $row){
-            $P_id = $row['P_id'];
-            $S_time = $row['S_time'];
-            $E_time = $row['E_time'];
-            $T_time = $this->total($S_time,$E_time);
-//            echo "Project: ".$P_id." Start Time: ".$S_time." End Time: ".$E_time.$T_time."<br>";
-        }//test display of information
         //Below is for the actual JSON file
         $thing = $db->prepare($sql);
         $thing->execute();
-        $display = $thing->fetchAll();
+        $display = $thing->fetchAll(PDO::FETCH_ASSOC); //get rid of the ugly indexes
         echo json_encode($display);
-        
-        //try-catch block?
     }
     
     public function updateTimer(){
