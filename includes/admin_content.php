@@ -5,7 +5,7 @@
                     <div class="col-lg-12">
                         <h1 class="page-header">
                             Admin Home
-                            <small>Subheading</small>
+                            <small>Subheading</small> 
                         </h1>
                        <?php
                             
@@ -24,7 +24,18 @@
                             </li>
                         </ol>
                     </div>
-                    <div class="col-lg-12">
+                    
+                    <div ng-controller="timerCounter">
+                        <h1>
+                            <span id="hours">{{hours}} :</span>
+                            <span id="minutes"> {{minutes}} :</span> 
+                            {{seconds}} 
+                            <span id="units">sec</span>
+                        </h1>
+                        <button class="btn" ng-click="stop()">Stop</button>
+                    </div>
+
+                    <div>
                     <?php                        
                         if(isset($_GET['action'])){
                             switch ($_GET['action']){
