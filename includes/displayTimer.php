@@ -10,60 +10,31 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header"> Admin Home </h1>
+
+            <!-- display timer -->
             <h1>
-                <span id="hours"></span>
-                <span id="minutes"></span>
-                <span id="seconds"></span> 
-                <span id="units">sec</span>
+                <span id="hours"></span><span id="hoursUnits"></span>
+                <span id="minutes"></span><span id="minutesUnits"></span>
+                <span id="seconds">0</span><span id="secondsUnits">&nbsp;sec</span>
             </h1>
-            <script>   
-                // display ticking clock, takes in a starting time
-                function timerCounter(hours, minutes, seconds) {
-                    // funtion that runs every 1000 milliseconds
-                    onTimeout = function(){
-                        // increment and display seconds on start
-                        seconds++;
-                        document.getElementById("seconds").innerHTML = seconds;
-                        // check if seconds is greater or equal to 60
-                        if (seconds >= 6) {
-                            // set seconds to 0 and display the new value
-                            // increment minutes and display the new minute value 
-                            seconds = 0;
-                            document.getElementById("seconds").innerHTML = seconds;
-                            minutes++;
-                            document.getElementById("minutes").innerHTML = minutes;
-                            document.getElementById("minutes").style.display = "inline-block";
-                          // check if minutes is greater to or equal to 60
-                          if(minutes >= 6) {
-                            // set minutes to 0 and display the new value
-                            // increment hours and display the new hour value
-                            minutes = 0;
-                            hours++;
-                            document.getElementById("minutes").innerHTML = minutes;
-                            document.getElementById("hours").innerHTML = hours;
-                            document.getElementById("hours").style.display = "inline-block";
-                          }
-                        }
-                        // changes unites to show minutes if time is > 60s
-                        // and shows hours if time is > 60m
-                        if(minutes > 0 && hours == 0){
-                            document.getElementById("units").innerHTML = "minutes";
-                        } else if(hours != 0) {
-                            document.getElementById("units").innerHTML = "hours";
-                        }
-                        // sets a timeout that runs onTimeout every 1000ms
-                        // this runs asyncrenously 
-                        setTimeout(function(){ onTimeout() },1000);
-                    }
-                    setTimeout(function(){ onTimeout() },1000);
-                    // stop = function(){ 
-                    //     $timeout.cancel(mytimeout);
-                    // }          
+            <script>// timerCounter(0,0,0); </script>
+
+            <!-- Start timer -->
+            <button class="btn btn-success" id="startTimerButton" onclick="timerCounter(0,0,0)">Start</button>
+            <!-- Pause timer -->
+            <button class="btn btn-warning" id="pauseTimerButton" onclick="pauseTimer()">Pause</button>
+            <!-- Resume timer -->
+            <button class="btn btn-success" id="resumeTimerButton" onclick="resumeTimer()">Resume</button>
+            <!-- Submit timer -->
+            <button class="btn btn-info" id="submitTimerButton" name="submit" onclick="submitTime()">Submit</button>
+
+            <?php                        
+                if(isset($_GET['submit'])){
+                    $timer = new Timer();
+                    $timer->start(2,2);//would get these numbers from sessions & get
                 }
-                timerCounter(0,0,0);
-            </script>
-            <button class="btn" ng-click="stop()">Stop</button>
-            <button class="btn" onClick='timerCounter();'>test</button>
+                $timer = new Timer();
+            ?>
         </div>
 
         <div class="col-lg-12">
@@ -79,11 +50,16 @@
                 </ul>
             </div>
             <!-- get start time -->
-            <input type="text" placeholder="Start Time">
+            <input type="text" id="currentTimeStart" placeholder="Start Time" value="">
+            <input type="date" id="currentDayStart" value="">
             <!-- get end time -->
-            <input type="text" placeholder="End Time">
+            <input type="text" id="currentTimeEnd" placeholder="End Time" value="">
+            <input type="date" id="currentDayEnd" class="form-control" value="">
             <!-- TODO display total time -->
             <input type="text" placeholder="userID">
+            <input type="time">
+            <script>setCurrentTime();</script>
+
             <button class="btn">Save</button>
         </div>
 

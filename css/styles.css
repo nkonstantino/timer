@@ -3,4 +3,27 @@
 }
 #hours {
 	display: none;
-} 
+}
+#startTimerButton {
+	display: inline-block;
+}
+#resumeTimerButton {
+	display: none;
+}
+#pauseTimerButton {
+	display: none;
+}
+#submitTimerButton {
+	display: none;
+}
+#minutesUnits {
+	display: none;
+	color: #999;
+}
+#hoursUnits {
+	display: none;
+	color: #999;
+}
+#secondsUnits {
+	color: #999;
+}

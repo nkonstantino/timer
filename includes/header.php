@@ -28,7 +28,6 @@
     <!-- Stylesheet -->
     <link href="../timer/css/styles.css" rel="stylesheet">
 
-
 </head>
 
 <body>
