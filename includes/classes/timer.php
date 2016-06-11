@@ -88,6 +88,21 @@ class Timer{
         echo json_encode($display);
     }
     
+    public function outputAll(){
+        //PURPOSE: Echo out information to display all timers for my sake.
+        include('database.php');//make sure it knows where the database is.
+        $sql = 'SELECT * FROM timer';
+        echo "<br>";
+        foreach($db->query($sql) as $row){
+            $T_id = $row['T_id'];
+            $P_id = $row['P_id'];
+            $S_time = $row['S_time'];
+            $E_time = $row['E_time'];
+            $T_time = $this->total($S_time,$E_time);
+            echo "Project: ".$P_id." Start Time: ".$S_time." End Time: ".$E_time." <a href=".$T_id.">Edit</a><br>";
+        }
+    }
+    
     public function updateTimer(){
         include('database.php');
         //PURPOSE: This is for editing exisiting timers.
@@ -108,8 +123,9 @@ class Timer{
             $t_time = $this->total($s_time_conv,$e_time_conv);
             $sql = "UPDATE timer SET P_id={$p_id},U_id={$u_id},S_time={$s_time_conv},E_time={$e_time_conv},T_time={$t_time} WHERE T_id={$t_id}";
             $db->query($sql);
+            echo "Timer updated!";
         } else {
-            echo "This is for use with the update_timer form!";
+            echo "This is for use with the update timer form!";
         }
     }
     

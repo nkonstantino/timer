@@ -8,17 +8,7 @@
             <?php include("includes/side_nav.php"); ?>
             <!-- /.navbar-collapse -->
         </nav>
-<?php 
-//Send edited information to the server!
-//POST data to variables
-//convert back to unix time.
-//get E_time
-//SQL UPDATE query
-if(isset($_POST['update_timer'])){
-    $timer = new Timer();
-    $timer->updateTimer();
-}
-?>
+
         <div id="page-wrapper">
 
             <div class="container-fluid">
@@ -39,6 +29,17 @@ if(isset($_POST['update_timer'])){
                             </li>
                         </ol>
                     </div>
+                    <?php 
+                    //Send edited information to the server!
+                    //POST data to variables
+                    //convert back to unix time.
+                    //get E_time
+                    //SQL UPDATE query
+                        if(isset($_POST['update_timer'])){
+                            $timer = new Timer();
+                            $timer->updateTimer();
+                        }
+                    ?>
                     <?php 
                         if(isset($_GET['t_id'])){
                             $t_id = $_GET['t_id'];
