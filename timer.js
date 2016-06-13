@@ -28,8 +28,10 @@ mainApp.controller('timerController', function($scope, $http) {
         var ETime = new Date(1970,0,1,EDT.getHours(),EDT.getMinutes(),EDT.getSeconds());
         $scope.editETIME = ETime;
      };
-    //SUBMIT EDIT FUNCTION
-    //Moves data from form into database.
+    /////////////////////////////////////////
+    //SUBMIT EDIT FUNCTION///////////////////
+    //Moves data from form into database.////
+    /////////////////////////////////////////
     $scope.submitEdit = function(){
         var editRequest = $http({
             method: "post",
@@ -40,19 +42,73 @@ mainApp.controller('timerController', function($scope, $http) {
                 UID: $scope.editUID,
                 PID: $scope.editPID,
                 SDATE: $scope.editSDATE,
-                STIME: $scope.editSTIME
+                STIME: $scope.editSTIME,
+                EDATE: $scope.editEDATE,
+                ETIME: $scope.editETIME
             },
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         });
-        //post request, everything in form into an array/json thing.
+        
         editRequest.success(function (response){
-          console.log(response);  
+            //Clear everything out!
+            //console.log(response);
+            $scope.editTID = null;
+            $scope.editUID = null;
+            $scope.editPID = null;
+            $scope.editSDATE = null;
+            $scope.editSTIME = null;
+            $scope.editEDATE = null;
+            $scope.editETIME = null;
+            document.getElementById("editmessage").textContent = "Edit Successful!";
         });
     };
     
-    //SUBMIT ADD FUNCTION
-    //Adds data from form into database.
+    //////////////////////////////////////
+    //SUBMIT ADD FUNCTION/////////////////
+    //Adds data from form into database.//
+    /////////////////////////////////////
     $scope.submitAdd = function(){
-        console.log("Timer Added");
+        var addRequest = $http({
+            method: "post",
+            url: "timer_actions.php",
+            data: {
+                action: "Add",
+                UID: $scope.addUID,
+                PID: $scope.addPID,
+                SDATE: $scope.addSDATE,
+                STIME: $scope.addSTIME,
+                EDATE: $scope.addEDATE,
+                ETIME: $scope.addETIME
+            },
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        });
+        addRequest.success(function (response){
+            //Clear everything out!
+            //console.log(response);
+            $scope.addTID = null;
+            $scope.addUID = null;
+            $scope.addPID = null;
+            $scope.addSDATE = null;
+            $scope.addSTIME = null;
+            $scope.addEDATE = null;
+            $scope.addETIME = null;
+            document.getElementById("addmessage").textContent = "Add Successful!";
+        });
     };
+    
+    $scope.submitDelete = function(T_id,U_id){
+        var delRequest = $http({
+            method: "post",
+            url: "timer_actions.php",
+            data: {
+                action: "Delete",
+                TID: T_id,
+                UID: U_id
+            },
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        });
+        delRequest.success(function (response){
+              document.getElementById("delmessage").textContent = "Delete Successful!";
+        });
+    }
 });
