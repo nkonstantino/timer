@@ -25,9 +25,10 @@
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
     <!-- Timer Functions -->
     <script src="/timer/js/timer_functions.js"></script>
+    <!-- Moment JS -->
+    <script src="http://momentjs.com/downloads/moment.js"></script>
     <!-- Stylesheet -->
     <link href="/timer/css/styles.css" rel="stylesheet">
-    <script src="/timer/js/moment.js"></script>
 
 
 </head>
