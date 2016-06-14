@@ -81,49 +81,76 @@ class Timer{
         include('database.php');//make sure it knows where the database is.
         //find all of the timers
         $sql = 'SELECT * FROM timer';
-//        echo "<br>";
-        foreach($db->query($sql) as $row){
-            $P_id = $row['P_id'];
-            $S_time = $row['S_time'];
-            $E_time = $row['E_time'];
-            $T_time = $this->total($S_time,$E_time);
-//            echo "Project: ".$P_id." Start Time: ".$S_time." End Time: ".$E_time.$T_time."<br>";
-        }//test display of information
         //Below is for the actual JSON file
         $thing = $db->prepare($sql);
         $thing->execute();
-        $display = $thing->fetchAll();
-        echo json_encode($display);
-        
-        //try-catch block?
+        $display = $thing->fetchAll(PDO::FETCH_ASSOC); //get rid of the ugly indexes
+        echo json_encode($display, JSON_NUMERIC_CHECK); //Make JSON, make numbers into numbers!
     }
     
-    public function changeTimer(){
+    public function updateTimer($t_id,$u_id,$p_id,$s_datetime,$e_datetime){
+        include('database.php');
         //PURPOSE: This is for editing exisiting timers.
-        //Will create "editTimer.php" for form.
-        //Query by timer ID
+        //UPDATED TO WORK WITH ANGULAR FORM!
+        $t_time = $this->total($s_datetime,$e_datetime);
+        $sql = "UPDATE timer SET P_id={$p_id},U_id={$u_id},S_time={$s_datetime},E_time={$e_datetime},T_time={$t_time} WHERE T_id={$t_id}";
+        $update = $db->query($sql);
+        if($update){
+            return true;
+        } else {
+            header($_SERVER['SERVER_PROTOCOL'] . ' 500 internal server error', true, 500);
+        }
     }
     
-    public function addTimer(){
+    public function getTimer(){ //This doesn't work?
+        include('database.php');
+        if(isset($_GET['t_id'])){
+            $t_id = $_GET['t_id'];
+            $sql = "SELECT * FROM timer WHERE T_id = {$t_id}";
+            foreach($db->query($sql) as $row){
+                $T_id = $row['T_id'];
+                $P_id = $row['P_id'];
+                $U_id = $row['U_id'];
+                $S_time = $row['S_time'];
+                $E_time = $row['E_time'];
+            }
+            //convert times
+            $s_date = date('Y-m-d',$S_time);
+            $s_time = date('h:i:s',$S_time);
+            $e_date = date('Y-m-d',$E_time);
+            $e_time = date('h:i:s',$E_time);
+        }
+    }
+    
+    public function addTimer($u_id,$p_id,$s_datetime,$e_datetime){
         //PURPOSE: Add a timer that a user might have forgotten to record.
-        //Will create "addTimer.php" for form.
-        //Insert query ezpz.
+        include('database.php');
+        $t_time = $this->total($s_datetime,$e_datetime);
+        $sql = "INSERT INTO timer (P_id,U_id,S_time,E_time,T_time) VALUES ({$p_id},{$u_id},{$s_datetime},{$e_datetime},{$t_time})";
+        $add = $db->query($sql);
+        if($add){
+            return true;
+        } else {
+            header($_SERVER['SERVER_PROTOCOL'] . ' 500 internal server error', true, 500);
+        }
     }
     
+    public function deleteTimer($U_id,$T_id){
+        //PURPOSE: Delete selected timer!
+        include('database.php');
+        $sql = "DELETE FROM timer WHERE T_id = {$T_id} AND U_id = {$U_id}";
+        $del = $db->query($sql);
+        if($del){
+            return true;
+        } else {
+            header($_SERVER['SERVER_PROTOCOL'] . ' 500 internal server error', true, 500);
+        }
+    }
+
     private function total($start,$end){
-        //get start and stop times from function call
-        //find difference
+        //get start and stop times from function call & find difference
         $total = $end - $start;
         return $total;
-        //echo "<br>";
-        //echo $total." seconds";
-//        if( $total > 0){
-//            return gmdate("H:i:s", $total);
-//            return " Total Time: ".floor($total/60) . " minutes";
-//        } else {
-//            return NULL;
-//        }
-        //return $total/3600 . " hours";
     }
 }
 ?>

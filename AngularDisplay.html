@@ -1,0 +1,102 @@
+<html>
+   
+<head>
+    <title>Angular JS Filters</title>
+     <!--STYLESHEET-->
+    <!--=================================================-->
+    <!--Open Sans Font [ OPTIONAL ] -->
+     <link href="http://www.bugy.io/css/googlefonts.css?v=105" rel="stylesheet">
+    <!--Bootstrap Stylesheet [ REQUIRED ]-->
+    <link href="http://www.bugy.io/css/bootstrap.min.css?v=105" rel="stylesheet">
+    <!--Nifty Stylesheet [ REQUIRED ]-->
+    <link href="http://www.bugy.io/css/nifty.min.css?v=105" rel="stylesheet">
+    <!-- main.css -->
+    <link href="http://www.bugy.io/css/main.css?v=105" rel="stylesheet">
+    <!--pace.css-->
+    <link href="http://www.bugy.io/css/pace.min.css?v=105" rel="stylesheet">
+    <!--SCRIPT-->
+    <!--=================================================-->
+    <script src = "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <script src = "timer.js"></script>
+</head>
+   
+<body class="panel">
+    <h2>AngularJS Sample Application</h2>
+      
+    <div class="panel-body" ng-app = "TimerApp" ng-controller = "timerController">
+        <!-- View all timers -->
+        <button class="btn btn-purple btn-labeled" ng-click="StartStop()">Start / Stop</button>
+        <span class="btn-danger" id="delmessage"></span>
+        <table class="table table-bordered table-hover toggle-circle">
+            <thead class="angularHead">
+                <th>Timer ID</th>
+                <th>User ID</th>
+                <th>Project ID</th>
+                <th>Start Date</th>
+                <th>Start Time</th>
+                <th>End Date</th>
+                <th>End Time</th>
+                <th>Total Time</th>
+                <th>Edit</th>
+                <th>Delete</th>   
+            </thead>
+            <tr ng-repeat="t in timers | orderBy:'T_id'">
+                <td>{{ t.T_id }}</td>
+                <td>{{ t.U_id }}</td>
+                <td>{{ t.P_id }}</td>
+                <td>{{ t.S_time *1000 | date:'MM-dd-yyyy'}}</td>
+                <td>{{ t.S_time *1000 | date:'HH:mm:ss'}}</td>
+                <td>{{ t.E_time *1000 | date:'MM-dd-yyyy'}}</td>
+                <td>{{ t.E_time *1000 | date:'HH:mm:ss'}}</td>
+                <td>{{ t.T_time }}</td>
+                <td><button class="btn btn-success btn-labeled" ng-click="editTimer(t.T_id, t.U_id, t.P_id, t.S_time, t.E_time)">Edit</button></td>
+                <td><button class="btn btn-danger btn-labeled" ng-click="submitDelete(t.T_id, t.U_id)">Delete</button></td>
+            </tr>	
+        </table>
+        <!-- Editing timers
+         
+        POST request to PHP page that takes in T_id and outputs JSON with all of that timer's info.
+        Get JSON as response, fill in that info into the fields
+        Submit button submits all the form information as post to php function. -->
+        <div>
+            <h2>Edit Timer</h2>
+            <label for="TID">TID</label><br>
+            <input ID="TID" type="text" size="40" ng-model="editTID" disabled><br>
+            <label for="UID">UID</label><br>
+            <input ID="UID" type="text" size="40" ng-model="editUID"><br>
+            <label for="PID">PID</label><br>
+            <input ID="PID" type="text" size="40" ng-model="editPID"><br>
+            <label for="SDATETIME">Start Date and Time</label><br>
+            <input ID="SDATETIME" type="date" size="40" ng-model="editSDATE">
+            <input ID="SDATETIME" type="time" size="40" ng-model="editSTIME"><br>
+            <label for="EDATETIME">End Date and Time</label><br>
+            <input ID="EDATETIME" type="date" size="40" ng-model="editEDATE">
+            <input ID="EDATETIME" type="time" size="40" ng-model="editETIME"><br>
+            <button ng-click="submitEdit()">Edit Timer</button><br>
+            <span id="editmessage"></span>
+        </div>
+        <br>
+        <!-- Adding timers 
+         
+        form with a bunch of pre-filled values
+        submit button submits like in EDIT timer, but using the PHP function that calls INSERT instead of UPDATE-->
+        <div>
+            <h2>Add Timer</h2>
+            <label for="TID">TID</label><br>
+            <input type="text" size="40" ng-model="addTID" disabled><br>
+            <label for="UID">UID</label><br>
+            <input type="text" size="40" ng-model="addUID"><br>
+            <label for="PID">PID</label><br>
+            <input type="text" size="40" ng-model="addPID"><br>
+            <label for="SDATETIME">Start Date and Time</label><br>
+            <input type="date" size="40" ng-model="addSDATE">
+            <input type="time" size="40" ng-model="addSTIME"><br>
+            <label for="EDATETIME">End Date and Time</label><br>
+            <input type="date" size="40" ng-model="addEDATE">
+            <input type="time" size="40" ng-model="addETIME"><br>
+            <button ng-click="submitAdd()">Add Timer</button><br>
+            <span id="addmessage"></span>
+        </div>
+    </div>
+</body>
+</html>

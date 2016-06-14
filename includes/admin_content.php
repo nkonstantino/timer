@@ -37,19 +37,17 @@
                                     $timer->stop(2,2); //would get these numbers from sessions
                                     break;
                                 default:
-                                    $timer = new Timer();
-                                    //$timer->displayAll();
                             }
                         }
-                        $timer = new Timer();
-                        //$timer->start(2,2);
-                        //$timer->check_exist(2,2);
-                        //$timer->displayAll();
                     ?>
                     <form action="" method="get">
                         <input type="submit" value="Start" name="action">
                         <input type="submit" value="Stop" name="action">
                     </form>
+                    <?php 
+                    $timer = new Timer();
+                    $timer->outputAll();    
+                    ?>
                     </div>
                 </div>
                 <!-- /.row -->
