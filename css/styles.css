@@ -1,0 +1,53 @@
+#minutes {
+	display: none;
+}
+#hours {
+	display: none;
+}
+#startTimerButton {
+	display: inline-block;
+}
+#resumeTimerButton {
+	display: none;
+}
+#pauseTimerButton {
+	display: none;
+}
+#submitTimerButton {
+	display: none;
+}
+#minutesUnits {
+	display: none;
+}
+#hoursUnits {
+	display: none;
+}
+#secondsUnits {
+
+}
+#projectId {
+	margin-top: 5px;
+}
+.submitTime {
+	background-color: #b25e71;
+	color: white;
+	margin-top: 25px;
+	padding-bottom: 20px;
+	padding-top: 10px;
+}
+.dropdown-menu {
+	color: #666;
+}
+#totalTimeSubmit {
+	margin-top: 25px;
+	margin-left: 15px;
+}
+#totalTime {
+	margin-left: 15px;
+}
+.units {
+	color: #999;
+}
+#newProjectId {
+	margin-top: 5px;
+}
