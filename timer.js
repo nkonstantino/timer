@@ -1,10 +1,42 @@
 var mainApp = angular.module("TimerApp", []);
 mainApp.controller('timerController', function($scope, $http) {
     var url = "timer_json.php";
-    $http.get(url).success( function(response) {
-        $scope.timers = response;
-    });
-    $scope.count = 0;
+    var refresh = function(){
+        $http.get(url).success( function(response) {
+            $scope.timers = response;
+        });
+    };
+    refresh();
+    //START & STOP FUNCTION
+    $scope.active = false;
+    $scope.StartStop =function(){
+        //Check to see if the user has an open timer.
+        if($scope.active=false){
+            var StartRequest = $http({
+                method: "post",
+                url: "timer_actions.php",
+                data: {
+                    action: "start",
+                    TID: T_id,
+                    UID: U_id
+                },
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            });
+        delRequest.success(function (response){
+              document.getElementById("delmessage").textContent = "Delete Successful!";
+        });
+        }else{
+            var StopRequest = $http({
+                method: "post",
+                url: "timer_actions.php",
+                data: {
+                    action: "stop",
+                    TID: T_id,
+                    UID: U_id
+                }
+            })
+        }
+    };
     //EDIT TIMER FUNCTION
     //Moves data from table into form.
     $scope.editTimer = function(T_id,U_id,P_id,S_time,E_time){
@@ -60,6 +92,7 @@ mainApp.controller('timerController', function($scope, $http) {
             $scope.editEDATE = null;
             $scope.editETIME = null;
             document.getElementById("editmessage").textContent = "Edit Successful!";
+            refresh();
         });
     };
     
@@ -93,6 +126,7 @@ mainApp.controller('timerController', function($scope, $http) {
             $scope.addEDATE = null;
             $scope.addETIME = null;
             document.getElementById("addmessage").textContent = "Add Successful!";
+            refresh();
         });
     };
     
@@ -108,7 +142,8 @@ mainApp.controller('timerController', function($scope, $http) {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         });
         delRequest.success(function (response){
-              document.getElementById("delmessage").textContent = "Delete Successful!";
+            document.getElementById("delmessage").textContent = "Delete Successful!";
+            refresh();
         });
     }
 });
